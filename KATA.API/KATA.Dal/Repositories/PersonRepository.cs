@@ -1,4 +1,5 @@
 ﻿using KATA.Domain.Interfaces.Repositories;
+using KATA.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace KATA.Dal.Repositories;
@@ -11,9 +12,9 @@ public class PersonRepository : IPersonRepository
         _dbKataContext = dbKataContext;
     }
 
-    public async Task<IEnumerable<KATA.Domain.Models.Person>> GetAllPersonsAsync()
+    public async Task<IEnumerable<Person>> GetAllPersonsAsync()
     {
-        return (await _dbKataContext.People.ToListAsync()).Select(p => new KATA.Domain.Models.Person
+        return (await _dbKataContext.People.ToListAsync()).Select(p => new Person
         {
             FirstName = p.FirstName,
             Id = p.Id,
@@ -21,9 +22,9 @@ public class PersonRepository : IPersonRepository
         });
     }
 
-    public async Task<IEnumerable<Domain.Models.Person>> GetPersonByIdAsync(int id)
+    public async Task<IEnumerable<Person>> GetPersonByIdAsync(int id)
     {
-        return (await _dbKataContext.People.ToListAsync()).Select(p => new KATA.Domain.Models.Person
+        return (await _dbKataContext.People.ToListAsync()).Select(p => new Person
         {
             FirstName = p.FirstName,
             Id = p.Id,

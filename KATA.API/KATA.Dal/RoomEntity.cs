@@ -3,11 +3,11 @@ using System.Collections.Generic;
 
 namespace KATA.Dal;
 
-public partial class Room
+public partial class RoomEntity
 {
     public int Id { get; set; }
 
     public string RoomName { get; set; } = null!;
 
-    public virtual ICollection<Booking> Bookings { get; set; } = new List<Booking>();
+    public virtual ICollection<BookingEntity> Bookings { get; set; } = new List<BookingEntity>();
 }

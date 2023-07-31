@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace KATA.Dal;
 
-public partial class Person
+public partial class PersonEntity
 {
     public int Id { get; set; }
 
@@ -11,5 +11,5 @@ public partial class Person
 
     public string LastName { get; set; } = null!;
 
-    public virtual ICollection<Booking> Bookings { get; set; } = new List<Booking>();
+    public virtual ICollection<BookingEntity> Bookings { get; set; } = new List<BookingEntity>();
 }

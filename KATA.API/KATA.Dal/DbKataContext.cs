@@ -15,15 +15,15 @@ public partial class DbKataContext : DbContext
     {
     }
 
-    public virtual DbSet<Booking> Bookings { get; set; }
+    public virtual DbSet<BookingEntity> Bookings { get; set; }
 
-    public virtual DbSet<Person> People { get; set; }
+    public virtual DbSet<PersonEntity> People { get; set; }
 
-    public virtual DbSet<Room> Rooms { get; set; }
+    public virtual DbSet<RoomEntity> Rooms { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Booking>(entity =>
+        modelBuilder.Entity<BookingEntity>(entity =>
         {
             entity.ToTable("Booking");
 
@@ -38,7 +38,7 @@ public partial class DbKataContext : DbContext
                 .HasConstraintName("FK_Booking_Room");
         });
 
-        modelBuilder.Entity<Person>(entity =>
+        modelBuilder.Entity<PersonEntity>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK_User_1");
 
@@ -52,7 +52,7 @@ public partial class DbKataContext : DbContext
                 .IsUnicode(false);
         });
 
-        modelBuilder.Entity<Room>(entity =>
+        modelBuilder.Entity<RoomEntity>(entity =>
         {
             entity.ToTable("Room");
 
