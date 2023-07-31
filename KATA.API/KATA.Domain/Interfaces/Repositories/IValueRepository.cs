@@ -8,5 +8,5 @@ namespace KATA.Domain.Interfaces.Repositories;
 
 public interface IValueRepository
 {
-    IEnumerable<string> GetAllValues();
+    Task<IEnumerable<string>> GetAllValuesAsync();
 }

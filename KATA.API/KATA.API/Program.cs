@@ -1,7 +1,9 @@
+using KATA.Dal;
 using KATA.Dal.Repositories;
 using KATA.Domain.Interfaces.Repositories;
 using KATA.Domain.Interfaces.Sevices;
 using KATA.Domain.Services;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,7 +16,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IValueService, ValueService>();
 //builder.Services.AddSingleton<IValueService, ValueService>();
 builder.Services.AddScoped<IValueRepository, ValueRepository>();
-//builder.Services.AddDbContext<FuwearContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddDbContext<DbKataContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

@@ -17,8 +17,8 @@ public class ValueService : IValueService
         _valueRepository = valueRepository;
     }
 
-    public IEnumerable<string> GetAllValues()
+    public async Task<IEnumerable<string>> GetAllValuesAsync()
     {
-        return _valueRepository.GetAllValues();
+        return await _valueRepository.GetAllValuesAsync();
     }
 }

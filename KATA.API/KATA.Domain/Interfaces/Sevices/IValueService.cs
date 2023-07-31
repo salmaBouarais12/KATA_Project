@@ -8,5 +8,5 @@ namespace KATA.Domain.Interfaces.Sevices;
 
 public interface IValueService
 {
-    IEnumerable<string> GetAllValues();
+    Task<IEnumerable<string>> GetAllValuesAsync();
 }

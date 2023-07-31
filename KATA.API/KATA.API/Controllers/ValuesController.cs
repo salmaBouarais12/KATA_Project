@@ -18,9 +18,9 @@ namespace KATA.API.Controllers
 
         // GET: api/<ValuesController>
         [HttpGet]
-        public IEnumerable<string> Get()
+        public async Task<IEnumerable<string>> Get()
         {
-            return _valueService.GetAllValues();
+            return await _valueService.GetAllValuesAsync();
         }
 
         // GET api/<ValuesController>/5
