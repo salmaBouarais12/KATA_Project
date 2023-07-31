@@ -3,11 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.6.33829.357
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KATA.API", "KATA.API\KATA.API.csproj", "{20924449-C75E-4D17-B84D-1B1B39726841}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KATA.API", "KATA.API\KATA.API.csproj", "{20924449-C75E-4D17-B84D-1B1B39726841}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KATA.Domain", "KATA.Domain\KATA.Domain.csproj", "{ABBB0726-DC5B-4877-930A-2BEC48D8EB4F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KATA.Domain", "KATA.Domain\KATA.Domain.csproj", "{ABBB0726-DC5B-4877-930A-2BEC48D8EB4F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KATA.Dal", "KATA.Dal\KATA.Dal.csproj", "{6E5CE81A-7952-411A-8613-0B8A7AA2E473}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KATA.Dal", "KATA.Dal\KATA.Dal.csproj", "{6E5CE81A-7952-411A-8613-0B8A7AA2E473}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KATA.Test", "KATA.Test\KATA.Test.csproj", "{2E5BFCE8-9809-4A29-9D58-1D9125FC7861}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{6E5CE81A-7952-411A-8613-0B8A7AA2E473}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6E5CE81A-7952-411A-8613-0B8A7AA2E473}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6E5CE81A-7952-411A-8613-0B8A7AA2E473}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2E5BFCE8-9809-4A29-9D58-1D9125FC7861}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2E5BFCE8-9809-4A29-9D58-1D9125FC7861}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2E5BFCE8-9809-4A29-9D58-1D9125FC7861}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2E5BFCE8-9809-4A29-9D58-1D9125FC7861}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
