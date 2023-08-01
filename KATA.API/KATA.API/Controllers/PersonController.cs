@@ -30,10 +30,14 @@ public class PersonController : ControllerBase
 
     // GET api/<PersonController>
     [HttpGet("{id}")]
-    public async Task<IEnumerable<PersonResponse>> Get([FromRoute]int id)
+    public async Task<IActionResult> Get([FromRoute]int id)
     {
-        var persons = await _personService.GetPersonByIdAsync(id);
-        return persons.Select(p => new PersonResponse(p.Id, p.FirstName, p.LastName));
+        var person = await _personService.GetPersonByIdAsync(id);
+        if (person is not null )
+        {
+            return Ok (new PersonResponse(person.Id, person.FirstName, person.LastName));
+        }
+        return NotFound() ;
     }
 
     // POST api/<PersonController>

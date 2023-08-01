@@ -17,7 +17,7 @@ public class PersonService : IPersonService
         return await _personRepository.GetAllPersonsAsync();
     }
 
-    public async Task<IEnumerable<Person>> GetPersonByIdAsync(int id)
+    public async Task<Person?> GetPersonByIdAsync(int id)
     {
         return await _personRepository.GetPersonByIdAsync(id);
     }

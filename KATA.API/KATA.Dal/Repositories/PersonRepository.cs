@@ -1,6 +1,7 @@
 ﻿using KATA.Domain.Interfaces.Repositories;
 using KATA.Domain.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace KATA.Dal.Repositories;
 
@@ -22,13 +23,17 @@ public class PersonRepository : IPersonRepository
         });
     }
 
-    public async Task<IEnumerable<Person>> GetPersonByIdAsync(int id)
+    public async Task<Person?> GetPersonByIdAsync(int id)
     {
-        return (await _dbKataContext.People.ToListAsync()).Select(p => new Person
-        {
-            FirstName = p.FirstName,
-            Id = p.Id,
-            LastName = p.LastName
-        }).Where(p => p.Id.Equals(id));
+        var result =  await _dbKataContext.People.SingleOrDefaultAsync(p => p.Id == id);
+        if (result is not null) {
+            return new Person
+            {
+                FirstName = result.FirstName,
+                Id = result.Id,
+                LastName = result.LastName
+            };
+        }
+        return null;
     }
 }

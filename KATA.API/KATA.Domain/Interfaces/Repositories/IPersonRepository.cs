@@ -1,7 +1,9 @@
-﻿namespace KATA.Domain.Interfaces.Repositories;
+﻿using KATA.Domain.Models;
+
+namespace KATA.Domain.Interfaces.Repositories;
 
 public interface IPersonRepository
 {
-    Task<IEnumerable<KATA.Domain.Models.Person>> GetAllPersonsAsync();
-    Task<IEnumerable<KATA.Domain.Models.Person>> GetPersonByIdAsync(int id);
+    Task<IEnumerable<Person>> GetAllPersonsAsync();
+    Task<Person?> GetPersonByIdAsync(int id);
 }
