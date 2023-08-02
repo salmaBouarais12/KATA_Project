@@ -1,4 +1,5 @@
-﻿using KATA.API.DTO.Responses;
+﻿using KATA.API.DTO.Requests;
+using KATA.API.DTO.Responses;
 using KATA.Domain.Interfaces.Sevices;
 using Microsoft.AspNetCore.Mvc;
 
@@ -42,8 +43,15 @@ public class PersonController : ControllerBase
 
     // POST api/<PersonController>
     [HttpPost]
-    public void Post([FromBody] string value)
+    public IActionResult Post([FromBody] PostPersonRequest request)
     {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
+        // TODO CREATE PERSON
+        return Ok();
     }
 
     // PUT api/<PersonController>/5

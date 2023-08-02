@@ -21,8 +21,4 @@
     <ProjectReference Include="..\KATA.Domain\KATA.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="DTO\Requests\" />
-  </ItemGroup>
-
 </Project>
