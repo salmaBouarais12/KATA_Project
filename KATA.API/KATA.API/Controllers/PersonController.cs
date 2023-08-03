@@ -1,6 +1,7 @@
 ﻿using KATA.API.DTO.Requests;
 using KATA.API.DTO.Responses;
 using KATA.Domain.Interfaces.Sevices;
+using KATA.Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -26,32 +27,33 @@ public class PersonController : ControllerBase
         var persons = await _personService.GetAllPersonsAsync();
         var personDetails = persons.Select(p => new PersonResponse(p.Id, p.FirstName, p.LastName));
         var personsResponse = new PersonsResponse(personDetails);
-        return Ok (personsResponse);
+        return Ok(personsResponse);
     }
 
     // GET api/<PersonController>
     [HttpGet("{id}")]
-    public async Task<IActionResult> Get([FromRoute]int id)
+    public async Task<IActionResult> Get([FromRoute] int id)
     {
         var person = await _personService.GetPersonByIdAsync(id);
-        if (person is not null )
+        if (person is not null)
         {
-            return Ok (new PersonResponse(person.Id, person.FirstName, person.LastName));
+            return Ok(new PersonResponse(person.Id, person.FirstName, person.LastName));
         }
-        return NotFound() ;
+        return NotFound();
     }
 
     // POST api/<PersonController>
     [HttpPost]
-    public IActionResult Post([FromBody] PostPersonRequest request)
+    public async Task<IActionResult> Post([FromBody] PostPersonRequest personRequest)
     {
         if (!ModelState.IsValid)
         {
-            return BadRequest(ModelState);
+            return BadRequest(ModelState); // error 404
         }
+        var person = new Person { FirstName = personRequest.FirstName, LastName = personRequest.LastName };
+        await _personService.AddPersonsAsync(person);
 
-        // TODO CREATE PERSON
-        return Ok();
+        return Ok(new PersonResponse(person.Id, person.FirstName, person.LastName));
     }
 
     // PUT api/<PersonController>/5

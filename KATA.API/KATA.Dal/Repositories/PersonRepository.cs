@@ -25,8 +25,9 @@ public class PersonRepository : IPersonRepository
 
     public async Task<Person?> GetPersonByIdAsync(int id)
     {
-        var result =  await _dbKataContext.People.SingleOrDefaultAsync(p => p.Id == id);
-        if (result is not null) {
+        var result = await _dbKataContext.People.SingleOrDefaultAsync(p => p.Id == id);
+        if (result is not null)
+        {
             return new Person
             {
                 FirstName = result.FirstName,
@@ -35,5 +36,13 @@ public class PersonRepository : IPersonRepository
             };
         }
         return null;
+    }
+
+    public async Task<Person> AddPersonsAsync(Person person)
+    {
+        var personToAdd = new PersonEntity { FirstName = person.FirstName, LastName = person.LastName };
+        _dbKataContext.People.Add(personToAdd);
+        await _dbKataContext.SaveChangesAsync();
+        return new Person {Id = person.Id, FirstName = person.FirstName };
     }
 }

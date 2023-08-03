@@ -6,4 +6,5 @@ public interface IPersonService
 {
     Task<IEnumerable<Person>> GetAllPersonsAsync();
     Task<Person?> GetPersonByIdAsync(int id);
+    Task<Person> AddPersonsAsync(Person person);
 }
