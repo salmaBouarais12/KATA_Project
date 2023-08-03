@@ -43,6 +43,20 @@ public class PersonRepository : IPersonRepository
         var personToAdd = new PersonEntity { FirstName = person.FirstName, LastName = person.LastName };
         _dbKataContext.People.Add(personToAdd);
         await _dbKataContext.SaveChangesAsync();
-        return new Person {Id = person.Id, FirstName = person.FirstName };
+        return new Person { Id = person.Id, FirstName = person.FirstName };
+    }
+
+    public async Task<Person> UpdatePersonsAsync(int id, Person person)
+    {
+        var personToFind = await _dbKataContext.People.FindAsync(id);
+        var personTobeUpdated = new PersonEntity { FirstName = person.FirstName, LastName = person.LastName };
+        if (personToFind == null)
+        {
+            return null;
+        }
+        personToFind.FirstName = personTobeUpdated.FirstName;
+        personToFind.LastName = personTobeUpdated.LastName;
+        await _dbKataContext.SaveChangesAsync();
+        return new Person { Id = personToFind.Id, FirstName = personToFind.FirstName, LastName = personToFind.LastName };
     }
 }

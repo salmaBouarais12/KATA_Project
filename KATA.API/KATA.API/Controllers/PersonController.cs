@@ -48,7 +48,7 @@ public class PersonController : ControllerBase
     {
         if (!ModelState.IsValid)
         {
-            return BadRequest(ModelState); // error 404
+            return BadRequest(ModelState);
         }
         var person = new Person { FirstName = personRequest.FirstName, LastName = personRequest.LastName };
         await _personService.AddPersonsAsync(person);
@@ -58,8 +58,18 @@ public class PersonController : ControllerBase
 
     // PUT api/<PersonController>/5
     [HttpPut("{id}")]
-    public void Put(int id, [FromBody] string value)
+    public async Task<IActionResult> Put([FromRoute] int id, [FromBody] PostPersonRequest personRequest)
     {
+        var person = new Person { FirstName = personRequest.FirstName, LastName = personRequest.LastName };
+        var updatePerson = await _personService.UpdatePersonsAsync(id, person);
+        if (updatePerson == null)
+        {
+            return NotFound();
+        }
+        else
+        {
+            return Ok(new PersonResponse(updatePerson.Id, updatePerson.FirstName, updatePerson.LastName));
+        }
     }
 
     // DELETE api/<PersonController>/5
