@@ -74,7 +74,10 @@ public class PersonController : ControllerBase
 
     // DELETE api/<PersonController>/5
     [HttpDelete("{id}")]
-    public void Delete(int id)
+    public async Task<IActionResult> Delete([FromRoute] int id)
     {
+        var personToBeDeleted = await _personService.DeletePersonsAsync(id);
+        if (personToBeDeleted == null) return NotFound();
+        return Ok(new PersonResponse(personToBeDeleted.Id, personToBeDeleted.FirstName, personToBeDeleted.LastName));
     }
 }

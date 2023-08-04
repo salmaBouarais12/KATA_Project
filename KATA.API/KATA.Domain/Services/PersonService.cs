@@ -1,6 +1,7 @@
 ﻿using KATA.Domain.Interfaces.Repositories;
 using KATA.Domain.Interfaces.Sevices;
 using KATA.Domain.Models;
+using System;
 
 namespace KATA.Domain.Services;
 
@@ -29,5 +30,10 @@ public class PersonService : IPersonService
     public async Task<Person> UpdatePersonsAsync(int id, Person person)
     {
         return await _personRepository.UpdatePersonsAsync(id,person);
+    }
+
+    public async Task<Person> DeletePersonsAsync(int id)
+    {
+        return await _personRepository.DeletePersonsAsync(id);
     }
 }

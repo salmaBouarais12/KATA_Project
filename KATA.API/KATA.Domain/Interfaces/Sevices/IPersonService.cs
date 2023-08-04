@@ -8,4 +8,5 @@ public interface IPersonService
     Task<Person?> GetPersonByIdAsync(int id);
     Task<Person> AddPersonsAsync(Person person);
     Task<Person> UpdatePersonsAsync(int id, Person person);
+    Task<Person> DeletePersonsAsync(int id);
 }
