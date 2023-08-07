@@ -9,4 +9,19 @@ public class PostPersonRequest
     
     [Required]
     public string LastName { get; set; } = string.Empty;
+
+    public bool IsValid()
+    {
+        if (string.IsNullOrEmpty(FirstName))
+        {
+            return false;
+        }
+
+        if (string.IsNullOrEmpty(LastName))
+        {
+            return false;
+        }
+
+        return true;
+    }
 }

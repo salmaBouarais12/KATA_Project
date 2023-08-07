@@ -1,6 +1,8 @@
-﻿using KATA.Domain.Interfaces.Repositories;
+﻿using Azure;
+using KATA.Domain.Interfaces.Repositories;
 using KATA.Domain.Models;
 using KATA.Domain.Services;
+using Microsoft.AspNetCore.Mvc;
 using NFluent;
 using NSubstitute;
 using NSubstitute.Core;

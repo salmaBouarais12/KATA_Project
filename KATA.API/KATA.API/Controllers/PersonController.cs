@@ -46,10 +46,11 @@ public class PersonController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Post([FromBody] PostPersonRequest personRequest)
     {
-        if (!ModelState.IsValid)
+        if (personRequest is null || !personRequest.IsValid())
         {
-            return BadRequest(ModelState);
+            return BadRequest();
         }
+
         var person = new Person { FirstName = personRequest.FirstName, LastName = personRequest.LastName };
         await _personService.AddPersonsAsync(person);
 
