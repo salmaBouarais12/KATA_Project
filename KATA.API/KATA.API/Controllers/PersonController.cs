@@ -63,6 +63,11 @@ public class PersonController : ControllerBase
     {
         var person = new Person { FirstName = personRequest.FirstName, LastName = personRequest.LastName };
         var updatePerson = await _personService.UpdatePersonsAsync(id, person);
+        if (personRequest is null || !personRequest.IsValid())
+        {
+            return BadRequest();
+        }
+
         if (updatePerson == null)
         {
             return NotFound();
