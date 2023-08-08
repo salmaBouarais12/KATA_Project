@@ -44,7 +44,7 @@ public class PersonRepository : IPersonRepository
         var personToAdd = new PersonEntity { FirstName = person.FirstName, LastName = person.LastName };
         _dbKataContext.People.Add(personToAdd);
         await _dbKataContext.SaveChangesAsync();
-        return new Person { Id = person.Id, FirstName = person.FirstName };
+        return new Person { Id = personToAdd.Id, FirstName = personToAdd.FirstName,LastName = personToAdd.LastName };
     }
 
     public async Task<Person> UpdatePersonsAsync(int id, Person person)

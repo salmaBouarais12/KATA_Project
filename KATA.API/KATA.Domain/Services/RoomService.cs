@@ -11,6 +11,7 @@ public class RoomService : IRoomService
     {
         _roomRepository = roomRepository;
     }
+
     public async Task<IEnumerable<Room>> GetAllRoomsAsync()
     {
         return await _roomRepository.GetAllRoomsAsync();
@@ -19,5 +20,10 @@ public class RoomService : IRoomService
     public async Task<Room?> GetRoomByIdAsync(int id)
     {
         return await _roomRepository.GetRoomByIdAsync(id);
+    }
+
+    public async Task<Room> AddRoomsAsync(Room room)
+    {
+        return await _roomRepository.AddRoomsAsync(room);
     }
 }

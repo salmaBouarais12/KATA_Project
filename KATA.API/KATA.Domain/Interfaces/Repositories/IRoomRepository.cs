@@ -6,4 +6,5 @@ public interface IRoomRepository
 {
     Task<IEnumerable<Room>> GetAllRoomsAsync();
     Task<Room?> GetRoomByIdAsync(int id);
+    Task<Room> AddRoomsAsync(Room room);
 }
