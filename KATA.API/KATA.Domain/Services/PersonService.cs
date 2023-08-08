@@ -1,7 +1,6 @@
 ﻿using KATA.Domain.Interfaces.Repositories;
 using KATA.Domain.Interfaces.Sevices;
 using KATA.Domain.Models;
-using System;
 
 namespace KATA.Domain.Services;
 
