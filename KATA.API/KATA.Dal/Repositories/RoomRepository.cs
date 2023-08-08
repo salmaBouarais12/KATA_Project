@@ -20,4 +20,11 @@ public class RoomRepository : IRoomRepository
             RoomName = r.RoomName
         });
     }
+
+    public async Task<Room?> GetRoomByIdAsync(int id)
+    {
+        var rooms = await _dbKataContext.Rooms.SingleOrDefaultAsync(r => r.Id == id);
+        if (rooms == null) return null;
+        return new Room { Id = rooms.Id, RoomName = rooms.RoomName };
+    }
 }

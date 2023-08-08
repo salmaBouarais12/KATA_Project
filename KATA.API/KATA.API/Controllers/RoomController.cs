@@ -1,6 +1,5 @@
 ﻿using KATA.API.DTO.Responses;
 using KATA.Domain.Interfaces.Sevices;
-using KATA.Domain.Services;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -29,9 +28,11 @@ namespace KATA.API.Controllers
 
         // GET api/<RoomController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public async Task<IActionResult> Get([FromRoute] int id)
         {
-            return "value";
+            var room = await _roomService.GetRoomByIdAsync(id);
+            if (room == null) return NotFound();
+            return Ok(new RoomResponse(room.Id, room.RoomName)); ;
         }
 
         // POST api/<RoomController>

@@ -15,4 +15,9 @@ public class RoomService : IRoomService
     {
         return await _roomRepository.GetAllRoomsAsync();
     }
+
+    public async Task<Room?> GetRoomByIdAsync(int id)
+    {
+        return await _roomRepository.GetRoomByIdAsync(id);
+    }
 }
