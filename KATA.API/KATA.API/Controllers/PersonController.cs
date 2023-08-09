@@ -53,8 +53,7 @@ public class PersonController : ControllerBase
 
         var person = new Person { FirstName = personRequest.FirstName, LastName = personRequest.LastName };
         var personAdded = await _personService.AddPersonsAsync(person);
-
-        return Ok(new PersonResponse(personAdded.Id, personAdded.FirstName, personAdded.LastName));
+        return Ok(personAdded);
     }
 
     // PUT api/<PersonController>/5
