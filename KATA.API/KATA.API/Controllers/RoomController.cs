@@ -49,7 +49,7 @@ namespace KATA.API.Controllers
             var room = new Room { RoomName = postRoomRequest.RoomName };
             var roomAdded = await _roomService.AddRoomsAsync(room);
 
-            return Ok(new RoomResponse(roomAdded.Id, roomAdded.RoomName));
+            return Ok(roomAdded);
         }
 
         // PUT api/<RoomController>/5
