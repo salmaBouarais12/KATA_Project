@@ -2,9 +2,7 @@
 using KATA.API.DTO.Responses;
 using KATA.Domain.Interfaces.Sevices;
 using KATA.Domain.Models;
-using KATA.Domain.Services;
 using Microsoft.AspNetCore.Mvc;
-using System;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -77,8 +75,11 @@ namespace KATA.API.Controllers
 
         // DELETE api/<RoomController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<IActionResult> Delete([FromRoute] int id)
         {
+            var roomToBeDeleted = await _roomService.DeleteRoomsAsync(id);
+            if (roomToBeDeleted == null) return NotFound();
+            return Ok(new RoomResponse(roomToBeDeleted.Id, roomToBeDeleted.RoomName));
         }
     }
 }

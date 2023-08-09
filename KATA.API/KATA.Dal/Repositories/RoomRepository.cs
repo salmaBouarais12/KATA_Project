@@ -1,7 +1,6 @@
 ﻿using KATA.Domain.Interfaces.Repositories;
 using KATA.Domain.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
 
 namespace KATA.Dal.Repositories;
 
@@ -45,6 +44,18 @@ public class RoomRepository : IRoomRepository
             return null;
         }
         roomToFind.RoomName = roomToUpdate.RoomName;
+        await _dbKataContext.SaveChangesAsync();
+        return new Room { Id = roomToFind.Id, RoomName = roomToFind.RoomName };
+    }
+
+    public async Task<Room> DeleteRoomsAsync(int id)
+    {
+        var roomToFind = await _dbKataContext.Rooms.FindAsync(id);
+        if (roomToFind == null)
+        {
+            return null;
+        }
+        _dbKataContext.Rooms.Remove(roomToFind);
         await _dbKataContext.SaveChangesAsync();
         return new Room { Id = roomToFind.Id, RoomName = roomToFind.RoomName };
     }
