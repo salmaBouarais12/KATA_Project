@@ -35,4 +35,17 @@ public class RoomRepository : IRoomRepository
         await _dbKataContext.SaveChangesAsync();
         return new Room { Id = roomToAdd.Id, RoomName = roomToAdd.RoomName };
     }
+
+    public async Task<Room> UpdateRoomsAsync(int id, Room room)
+    {
+        var roomToFind = await _dbKataContext.Rooms.FindAsync(id);
+        var roomToUpdate = new RoomEntity { RoomName = room.RoomName };
+        if (roomToFind == null)
+        {
+            return null;
+        }
+        roomToFind.RoomName = roomToUpdate.RoomName;
+        await _dbKataContext.SaveChangesAsync();
+        return new Room { Id = roomToFind.Id, RoomName = roomToFind.RoomName };
+    }
 }

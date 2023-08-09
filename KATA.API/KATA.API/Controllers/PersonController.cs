@@ -62,12 +62,11 @@ public class PersonController : ControllerBase
     public async Task<IActionResult> Put([FromRoute] int id, [FromBody] PostPersonRequest personRequest)
     {
         var person = new Person { FirstName = personRequest.FirstName, LastName = personRequest.LastName };
-        var updatePerson = await _personService.UpdatePersonsAsync(id, person);
         if (personRequest is null || !personRequest.IsValid())
         {
             return BadRequest();
         }
-
+        var updatePerson = await _personService.UpdatePersonsAsync(id, person);
         if (updatePerson == null)
         {
             return NotFound();
