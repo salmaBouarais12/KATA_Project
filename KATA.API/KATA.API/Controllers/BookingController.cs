@@ -1,6 +1,5 @@
 ﻿using KATA.API.DTO.Responses;
 using KATA.Domain.Interfaces.Sevices;
-using KATA.Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -22,7 +21,7 @@ namespace KATA.API.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            IEnumerable<Booking> bookings = await _bookingService.GetReservationsAsync();
+           var bookings = await _bookingService.GetReservationsAsync();
 
             var bookingDetails = bookings.Select(b => new BookingResponse(b.Id, b.RoomId, b.PersonId, b.BookingDate, b.StartSlot, b.EndSlot));
             var bookingsResponse = new BookingsResponse(bookingDetails);
@@ -30,10 +29,15 @@ namespace KATA.API.Controllers
         }
 
         // GET api/<BookingController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [HttpGet("{roomId}")]
+        public async Task<IActionResult> Get([FromRoute] int roomId)
         {
-            return "value";
+            var booking = await _bookingService.GetReservationByRoomIdAsync(roomId);
+            if (booking is not null)
+            {
+                return Ok(new BookingResponse(booking.Id, booking.RoomId, booking.PersonId, booking.BookingDate, booking.StartSlot, booking.EndSlot));
+            }
+            return NotFound();
         }
 
         // POST api/<BookingController>

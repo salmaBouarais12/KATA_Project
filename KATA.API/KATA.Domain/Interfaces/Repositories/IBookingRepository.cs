@@ -5,4 +5,5 @@ namespace KATA.Domain.Interfaces.Repositories;
 public interface IBookingRepository
 {
     Task<IEnumerable<Booking>> GetReservationsAsync();
+    Task<Booking?> GetReservationByRoomIdAsync(int roomId);
 }

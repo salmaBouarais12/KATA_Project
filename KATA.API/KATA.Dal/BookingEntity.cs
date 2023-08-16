@@ -5,6 +5,8 @@ namespace KATA.Dal;
 
 public partial class BookingEntity
 {
+    public int roomId;
+
     public int Id { get; set; }
 
     public int RoomId { get; set; }

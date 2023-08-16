@@ -25,4 +25,21 @@ public class BookingRepository : IBookingRepository
             EndSlot = b.EndSlot
         }).ToListAsync(); ;
     }
+    public async Task<Booking?> GetReservationByRoomIdAsync(int roomId)
+    {
+        var result = await _dbKataContext.Bookings.SingleOrDefaultAsync(b => b.RoomId == roomId);
+        if (result is not null)
+        {
+            return new Booking
+            {
+                Id = result.Id,
+                RoomId = result.RoomId,
+                PersonId = result.PersonId,
+                BookingDate = result.BookingDate,
+                StartSlot = result.StartSlot,
+                EndSlot = result.EndSlot
+            };
+        }
+        return null;
+    }
 }
