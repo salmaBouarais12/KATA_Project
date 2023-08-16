@@ -41,10 +41,19 @@ public class PersonRepository : IPersonRepository
 
     public async Task<Person> AddPersonsAsync(Person person)
     {
-        var personToAdd = new PersonEntity { FirstName = person.FirstName, LastName = person.LastName };
+        var personToAdd = new PersonEntity
+        {
+            FirstName = person.FirstName,
+            LastName = person.LastName
+        };
         _dbKataContext.People.Add(personToAdd);
         await _dbKataContext.SaveChangesAsync();
-        return new Person { Id = personToAdd.Id, FirstName = personToAdd.FirstName,LastName = personToAdd.LastName };
+        return new Person
+        {
+            Id = personToAdd.Id,
+            FirstName = personToAdd.FirstName,
+            LastName = personToAdd.LastName
+        };
     }
 
     public async Task<Person> UpdatePersonsAsync(int id, Person person)
@@ -58,7 +67,12 @@ public class PersonRepository : IPersonRepository
         personToFind.FirstName = personTobeUpdated.FirstName;
         personToFind.LastName = personTobeUpdated.LastName;
         await _dbKataContext.SaveChangesAsync();
-        return new Person { Id = personToFind.Id, FirstName = personToFind.FirstName, LastName = personToFind.LastName };
+        return new Person
+        {
+            Id = personToFind.Id,
+            FirstName = personToFind.FirstName,
+            LastName = personToFind.LastName
+        };
     }
 
     public async Task<Person> DeletePersonsAsync(int id)
@@ -70,6 +84,11 @@ public class PersonRepository : IPersonRepository
         }
         _dbKataContext.People.Remove(personToFind);
         await _dbKataContext.SaveChangesAsync();
-        return new Person { Id = personToFind.Id, FirstName = personToFind.FirstName, LastName = personToFind.LastName };
+        return new Person
+        {
+            Id = personToFind.Id,
+            FirstName = personToFind.FirstName,
+            LastName = personToFind.LastName
+        };
     }
 }

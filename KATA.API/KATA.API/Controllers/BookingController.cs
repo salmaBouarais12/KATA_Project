@@ -1,5 +1,7 @@
-﻿using KATA.API.DTO.Responses;
+﻿using KATA.API.DTO.Requests;
+using KATA.API.DTO.Responses;
 using KATA.Domain.Interfaces.Sevices;
+using KATA.Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -42,8 +44,36 @@ namespace KATA.API.Controllers
 
         // POST api/<BookingController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<IActionResult> Post([FromBody] PostBookingRequest postBookingRequest)
         {
+            if (postBookingRequest is null || !ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+            var reservation = new Booking();
+            reservation.RoomId = postBookingRequest.RoomId;
+            reservation.PersonId = postBookingRequest.PersonId;
+            reservation.BookingDate = postBookingRequest.BookingDate;
+            reservation.StartSlot = postBookingRequest.StartSlot;
+            reservation.EndSlot = postBookingRequest.EndSlot;
+            var addBooking = await _bookingService.AddReservationAsync(reservation);
+            var reservationResponse = new ReservationResponse();
+            reservationResponse.Message = addBooking.ErrorMsg.ToList();
+            if (addBooking.Booking != null)
+            {
+                reservationResponse.Reservation = new Booking 
+                { 
+                    Id = addBooking.Booking.Id, 
+                    RoomId = addBooking.Booking.RoomId, 
+                    PersonId = addBooking.Booking.PersonId, 
+                    BookingDate = addBooking.Booking.BookingDate, 
+                    StartSlot = addBooking.Booking.StartSlot, 
+                    EndSlot = addBooking.Booking.EndSlot 
+                };
+            }
+
+            reservationResponse.ListesCreneux = addBooking.ListOfReservation.Select(s => new SlotDTO { StartSlot = s.StartSlot, EndSlot = s.EndSlot });
+            return Ok(addBooking);
         }
 
         // PUT api/<BookingController>/5
