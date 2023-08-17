@@ -139,12 +139,12 @@ public class BookingService : IBookingService
         return (string.Empty, true);
     }
 
-    public async Task<IEnumerable<Booking>> GetReservationByRommAndByDate(SearchBooking searchBooking)
+    public async Task<IEnumerable<Booking?>> GetReservationByRommAndByDate(SearchBooking searchBooking)
     {
         return await _bookingRepository.GetReservationByRommAndByDate(searchBooking);
     }
 
-    public async Task<Booking> DeleteBookingsAsync(int id)
+    public async Task<Booking?> DeleteBookingsAsync(int id)
     {
         return await _bookingRepository.DeleteBookingsAsync(id);
     }

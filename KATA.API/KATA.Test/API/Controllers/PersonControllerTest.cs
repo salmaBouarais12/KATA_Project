@@ -3,6 +3,7 @@ using KATA.API.DTO.Requests;
 using KATA.API.DTO.Responses;
 using KATA.Domain.Interfaces.Sevices;
 using KATA.Domain.Models;
+using KATA.Domain.Services;
 using Microsoft.AspNetCore.Mvc;
 using NFluent;
 using NSubstitute;
@@ -73,17 +74,18 @@ public class PersonControllerTest
         Check.That(result).IsInstanceOf<NotFoundResult>();
     }
 
-    /*[Fact]
+    [Fact]
     public async Task Should_Update_Person()
     {
         var person = new PostPersonRequest { FirstName = "Lionel", LastName = "UpdateMessi" };
-
+        //personService.UpdatePersonsAsync(2, Arg.Any<Person>()).Returns(new Person());
+        personService.UpdatePersonsAsync(default, default!).ReturnsForAnyArgs(new Person());
         var personController = new PersonController(personService);
         var result = await personController.Put(2, person);
 
         Check.That(result).IsNotNull();
         Check.That(((ObjectResult)result).StatusCode).IsEqualTo(200);
-    }*/
+    }
 
     [Fact]
     public async Task Should_Not_Delete_Person_And_Return_404_When_Person_Doesnt_Exist()

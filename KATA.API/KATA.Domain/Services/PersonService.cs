@@ -26,12 +26,12 @@ public class PersonService : IPersonService
         return await _personRepository.AddPersonsAsync(person);
     }
 
-    public async Task<Person> UpdatePersonsAsync(int id, Person person)
+    public async Task<Person?> UpdatePersonsAsync(int id, Person person)
     {
         return await _personRepository.UpdatePersonsAsync(id,person);
     }
 
-    public async Task<Person> DeletePersonsAsync(int id)
+    public async Task<Person?> DeletePersonsAsync(int id)
     {
         return await _personRepository.DeletePersonsAsync(id);
     }

@@ -43,7 +43,7 @@ public class PersonServiceTest
 
         //Assert
         Check.That(result).IsNotNull();
-        Check.That(result.FirstName).Equals("Salma");
+        Check.That(result!.FirstName).Equals("Salma");
         Check.That(result.LastName).Equals("BOUARAIS");
     }
 }

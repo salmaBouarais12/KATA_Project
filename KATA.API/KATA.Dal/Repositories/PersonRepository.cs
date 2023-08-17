@@ -1,8 +1,6 @@
 ﻿using KATA.Domain.Interfaces.Repositories;
 using KATA.Domain.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Linq;
 
 namespace KATA.Dal.Repositories;
 
@@ -56,16 +54,15 @@ public class PersonRepository : IPersonRepository
         };
     }
 
-    public async Task<Person> UpdatePersonsAsync(int id, Person person)
+    public async Task<Person?> UpdatePersonsAsync(int id, Person person)
     {
         var personToFind = await _dbKataContext.People.FindAsync(id);
-        var personTobeUpdated = new PersonEntity { FirstName = person.FirstName, LastName = person.LastName };
         if (personToFind == null)
         {
             return null;
         }
-        personToFind.FirstName = personTobeUpdated.FirstName;
-        personToFind.LastName = personTobeUpdated.LastName;
+        personToFind.FirstName = person.FirstName;
+        personToFind.LastName = person.LastName;
         await _dbKataContext.SaveChangesAsync();
         return new Person
         {
@@ -75,7 +72,7 @@ public class PersonRepository : IPersonRepository
         };
     }
 
-    public async Task<Person> DeletePersonsAsync(int id)
+    public async Task<Person?> DeletePersonsAsync(int id)
     {
         var personToFind = await _dbKataContext.People.FindAsync(id);
         if (personToFind == null)

@@ -85,7 +85,7 @@ public class BookingRepository : IBookingRepository
             }).OrderBy(b => b.StartSlot).ToListAsync();
     }
 
-    public async Task<Booking> DeleteBookingsAsync(int id)
+    public async Task<Booking?> DeleteBookingsAsync(int id)
     {
         var bookingToDelete = await _dbKataContext.Bookings.FindAsync(id);
         if (bookingToDelete == null)

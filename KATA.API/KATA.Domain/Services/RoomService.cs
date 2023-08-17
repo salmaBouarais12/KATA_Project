@@ -27,12 +27,12 @@ public class RoomService : IRoomService
         return await _roomRepository.AddRoomsAsync(room);
     }
 
-    public async Task<Room> UpdateRoomsAsync(int id, Room room)
+    public async Task<Room?> UpdateRoomsAsync(int id, Room room)
     {
         return await _roomRepository.UpdateRoomsAsync(id,room);
     }
 
-    public async Task<Room> DeleteRoomsAsync(int id)
+    public async Task<Room?> DeleteRoomsAsync(int id)
     {
         return await _roomRepository.DeleteRoomsAsync(id);
     }
