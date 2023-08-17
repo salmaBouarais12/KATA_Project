@@ -8,4 +8,5 @@ public interface IBookingService
     Task<Booking?> GetReservationByRoomIdAsync(int roomId);
     Task<CreationBookingResult> AddReservationAsync(Booking reservation);
     Task<IEnumerable<Booking>> GetReservationByRommAndByDate(SearchBooking searchBooking);
+    Task<Booking> DeleteBookingsAsync(int id);
 }

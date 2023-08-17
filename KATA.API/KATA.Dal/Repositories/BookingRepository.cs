@@ -84,4 +84,24 @@ public class BookingRepository : IBookingRepository
 
             }).OrderBy(b => b.StartSlot).ToListAsync();
     }
+
+    public async Task<Booking> DeleteBookingsAsync(int id)
+    {
+        var bookingToDelete = await _dbKataContext.Bookings.FindAsync(id);
+        if (bookingToDelete == null)
+        {
+            return null;
+        }
+        _dbKataContext.Bookings.Remove(bookingToDelete);
+        await _dbKataContext.SaveChangesAsync();
+        return new Booking
+        {
+            Id = bookingToDelete.Id,
+            PersonId = bookingToDelete.PersonId,
+            RoomId = bookingToDelete.RoomId,
+            BookingDate = bookingToDelete.BookingDate,
+            StartSlot = bookingToDelete.StartSlot,
+            EndSlot = bookingToDelete.EndSlot
+        };
+    }
 }

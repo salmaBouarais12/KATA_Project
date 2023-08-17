@@ -23,7 +23,7 @@ namespace KATA.API.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-           var bookings = await _bookingService.GetReservationsAsync();
+            var bookings = await _bookingService.GetReservationsAsync();
 
             var bookingDetails = bookings.Select(b => new BookingResponse(b.Id, b.RoomId, b.PersonId, b.BookingDate, b.StartSlot, b.EndSlot));
             var bookingsResponse = new BookingsResponse(bookingDetails);
@@ -61,14 +61,14 @@ namespace KATA.API.Controllers
             reservationResponse.Message = addBooking.ErrorMsg.ToList();
             if (addBooking.Booking != null)
             {
-                reservationResponse.Reservation = new Booking 
-                { 
-                    Id = addBooking.Booking.Id, 
-                    RoomId = addBooking.Booking.RoomId, 
-                    PersonId = addBooking.Booking.PersonId, 
-                    BookingDate = addBooking.Booking.BookingDate, 
-                    StartSlot = addBooking.Booking.StartSlot, 
-                    EndSlot = addBooking.Booking.EndSlot 
+                reservationResponse.Reservation = new Booking
+                {
+                    Id = addBooking.Booking.Id,
+                    RoomId = addBooking.Booking.RoomId,
+                    PersonId = addBooking.Booking.PersonId,
+                    BookingDate = addBooking.Booking.BookingDate,
+                    StartSlot = addBooking.Booking.StartSlot,
+                    EndSlot = addBooking.Booking.EndSlot
                 };
             }
 
@@ -76,16 +76,20 @@ namespace KATA.API.Controllers
             return Ok(addBooking);
         }
 
-        // PUT api/<BookingController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
         // DELETE api/<BookingController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<IActionResult> Delete([FromRoute] int id)
         {
+            var bookingToDelete = await _bookingService.DeleteBookingsAsync(id);
+            if (bookingToDelete == null)
+                return NotFound();
+            return Ok(new BookingResponse
+                (bookingToDelete.Id,
+                bookingToDelete.RoomId,
+                bookingToDelete.PersonId,
+                bookingToDelete.BookingDate,
+                bookingToDelete.StartSlot,
+                bookingToDelete.EndSlot));
         }
     }
 }
