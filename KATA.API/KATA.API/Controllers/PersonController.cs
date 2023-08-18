@@ -2,7 +2,6 @@
 using KATA.API.DTO.Requests;
 using KATA.API.DTO.Responses;
 using KATA.Domain.Interfaces.Sevices;
-using KATA.Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -26,7 +25,8 @@ public class PersonController : ControllerBase
     public async Task<IActionResult> Get()
     {
         var persons = await _personService.GetAllPersonsAsync();
-        var personDetails = persons.Select(p => new PersonResponse(p.Id, p.FirstName, p.LastName));
+        var personDetails = persons.Select(p => p.ToPersonResponse());
+        // var personDetails = persons.Select(PersonExtension.ToPersonResponse);
         var personsResponse = new PersonsResponse(personDetails);
         return Ok(personsResponse);
     }
@@ -38,7 +38,7 @@ public class PersonController : ControllerBase
         var person = await _personService.GetPersonByIdAsync(id);
         if (person is not null)
         {
-            return Ok(new PersonResponse(person.Id, person.FirstName, person.LastName));
+            return Ok(person.ToPersonResponse());
         }
         return NotFound();
     }

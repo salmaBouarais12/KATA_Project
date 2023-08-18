@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace KATA.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/bookings")]
     [ApiController]
     public class BookingController : ControllerBase
     {
