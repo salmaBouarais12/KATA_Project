@@ -58,7 +58,7 @@ namespace KATA.API.Controllers
             reservation.EndSlot = postBookingRequest.EndSlot;
             var addBooking = await _bookingService.AddReservationAsync(reservation);
             var reservationResponse = new ReservationResponse();
-            reservationResponse.Message = addBooking.ErrorMsg.ToList();
+            //reservationResponse.Message = addBooking.ErrorMsg.ToList();
             if (addBooking.Booking != null)
             {
                 reservationResponse.Reservation = new Booking

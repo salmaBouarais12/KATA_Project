@@ -3,15 +3,9 @@ using KATA.API.DTO.Requests;
 using KATA.API.DTO.Responses;
 using KATA.Domain.Interfaces.Sevices;
 using KATA.Domain.Models;
-using KATA.Domain.Services;
 using Microsoft.AspNetCore.Mvc;
 using NFluent;
 using NSubstitute;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace KATA.Test.API.Controllers
 {

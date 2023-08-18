@@ -3,7 +3,6 @@ using KATA.API.DTO.Requests;
 using KATA.API.DTO.Responses;
 using KATA.Domain.Interfaces.Sevices;
 using KATA.Domain.Models;
-using KATA.Domain.Services;
 using Microsoft.AspNetCore.Mvc;
 using NFluent;
 using NSubstitute;

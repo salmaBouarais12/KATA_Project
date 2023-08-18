@@ -23,7 +23,7 @@ public class BookingService : IBookingService
     }
 
     public async Task<Booking?> GetReservationByRoomIdAsync(int roomId)
-    {
+    {  
         return await _bookingRepository.GetReservationByRoomIdAsync(roomId);
     }
 
