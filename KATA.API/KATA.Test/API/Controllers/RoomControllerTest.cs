@@ -52,6 +52,7 @@ namespace KATA.Test.API.Controllers
         {
             var roomRequest = new PostRoomRequest();
             var roomController = new RoomController(roomService);
+            roomController.ModelState.AddModelError("", "");
             var result = await roomController.Post(roomRequest);
 
             Check.That(result).IsNotNull();

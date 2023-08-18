@@ -1,4 +1,5 @@
-﻿using KATA.API.DTO.Requests;
+﻿using KATA.API.DTO.Helpers;
+using KATA.API.DTO.Requests;
 using KATA.API.DTO.Responses;
 using KATA.Domain.Interfaces.Sevices;
 using KATA.Domain.Models;
@@ -46,13 +47,12 @@ public class PersonController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Post([FromBody] PostPersonRequest personRequest)
     {
-        if (personRequest is null || !personRequest.IsValid())
+        if (!ModelState.IsValid)
         {
-            return BadRequest();
+            return BadRequest(ModelState);
         }
 
-        var person = new Person { FirstName = personRequest.FirstName, LastName = personRequest.LastName };
-        var personAdded = await _personService.AddPersonsAsync(person);
+        var personAdded = await _personService.AddPersonsAsync(personRequest.ToPerson());
         return Ok(personAdded);
     }
 
@@ -60,12 +60,11 @@ public class PersonController : ControllerBase
     [HttpPut("{id}")]
     public async Task<IActionResult> Put([FromRoute] int id, [FromBody] PostPersonRequest personRequest)
     {
-        var person = new Person { FirstName = personRequest.FirstName, LastName = personRequest.LastName };
-        if (personRequest is null || !personRequest.IsValid())
+        if (!ModelState.IsValid)
         {
             return BadRequest();
         }
-        var updatePerson = await _personService.UpdatePersonsAsync(id, person);
+        var updatePerson = await _personService.UpdatePersonsAsync(id, personRequest.ToPerson());
         if (updatePerson == null)
         {
             return NotFound();

@@ -56,10 +56,11 @@ public class PersonControllerTest
     {
         var personRequest = new PostPersonRequest();
         var personController = new PersonController(personService);
+        personController.ModelState.AddModelError("", "");
         var result = await personController.Post(personRequest);
 
         Check.That(result).IsNotNull();
-        Check.That(result).IsInstanceOf<BadRequestResult>();
+        Check.That(result).IsInstanceOf<BadRequestObjectResult>();
     }
 
     [Fact]

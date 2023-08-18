@@ -41,7 +41,7 @@ namespace KATA.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] PostRoomRequest postRoomRequest)
         {
-            if (postRoomRequest is null || !postRoomRequest.IsValid())
+            if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
@@ -57,7 +57,7 @@ namespace KATA.API.Controllers
         public async Task<IActionResult> Put([FromRoute] int id, [FromBody] PostRoomRequest postRoomRequest)
         {
             var room = new Room { RoomName = postRoomRequest.RoomName };
-            if (postRoomRequest is null || !postRoomRequest.IsValid())
+            if (!ModelState.IsValid)
             {
                 return BadRequest();
             }

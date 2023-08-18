@@ -46,7 +46,7 @@ namespace KATA.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] PostBookingRequest postBookingRequest)
         {
-            if (postBookingRequest is null || !ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
