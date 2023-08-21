@@ -2,6 +2,7 @@
 using KATA.API.DTO.Requests;
 using KATA.Domain.Interfaces.Sevices;
 using KATA.Domain.Models;
+using KATA.Domain.Services;
 using Microsoft.AspNetCore.Mvc;
 using NFluent;
 using NSubstitute;
@@ -20,8 +21,8 @@ public class BookingControllerTest
             new Booking { RoomId = 5 , PersonId =3, BookingDate = new DateTime(2023,04,12),StartSlot = 1 ,EndSlot = 4},
              new Booking { RoomId = 7 , PersonId =3, BookingDate = new DateTime(2022,04,15),StartSlot = 3 ,EndSlot = 6}
         };
-        bookingService.GetReservationsAsync().Returns(listBookings);
 
+        bookingService.GetReservationsAsync().Returns(listBookings);
         var bookingController = new BookingController(bookingService);
         var result = await bookingController.Get();
         Check.That(result).IsNotNull();
@@ -35,7 +36,6 @@ public class BookingControllerTest
         var bookingController = new BookingController(bookingService);
         bookingController.ModelState.AddModelError("", "");
         var result = await bookingController.Post(bookingRequest);
-
         Check.That(result).IsNotNull();
         Check.That(result).IsInstanceOf<BadRequestResult>();
     }
@@ -52,10 +52,8 @@ public class BookingControllerTest
     public async Task Should_Delete_Booking()
     {
         var booking = new Booking { RoomId = 2, PersonId = 1, BookingDate = new DateTime(2023, 05, 10), StartSlot = 2, EndSlot = 3 };
-
         var bookingController = new BookingController(bookingService);
         var bookingToDeletd = await bookingController.Delete(booking.Id);
-
         Check.That(bookingToDeletd).IsNotNull();
         Check.That(bookingToDeletd).IsInstanceOf<NotFoundResult>();
     }
