@@ -1,4 +1,5 @@
 ﻿using KATA.Domain.Interfaces.Repositories;
+using KATA.Domain.Interfaces.Sevices;
 using KATA.Domain.Models;
 using KATA.Domain.Services;
 using NFluent;
@@ -42,8 +43,34 @@ namespace KATA.Test.Domain.Services
             _ = roomRepository.GetRoomByIdAsync(2);
             var bookingService = new BookingService(bookingRepository, personService, roomService);
             var newBooking = await bookingService.AddReservationAsync(booking);
-            Assert.Null(newBooking.Booking);
+            Check.That(newBooking).IsNotNull();
             Check.That(newBooking.ErrorMsg).HasSize(2);
+            Assert.Null(newBooking.Booking);
+        }
+
+        [Fact]
+        public async Task Should_Create_Reservation()
+        {
+            var booking = new Booking { RoomId = 2, PersonId = 1, BookingDate = new DateTime(2023, 05, 10), StartSlot = 2, EndSlot = 3 };
+            IBookingRepository bookingRepository = Substitute.For<IBookingRepository>();
+            IPersonRepository personRepository = Substitute.For<IPersonRepository>();
+            IRoomRepository roomRepository = Substitute.For<IRoomRepository>();
+            var personService = new PersonService(personRepository);
+            var roomService = new RoomService(roomRepository);
+            var rr = roomRepository.GetRoomByIdAsync(2);
+            var pp = personRepository.GetPersonByIdAsync(1);
+            var bookingForSubstitute = new Booking
+            {
+                Id = 1,
+                PersonId = pp.Id,
+                RoomId = rr.Id,
+                StartSlot = booking.StartSlot,
+                EndSlot = booking.EndSlot,
+            };
+            var bb = bookingRepository.AddReservationAsync(booking).Returns(bookingForSubstitute);
+            var bookingService = new BookingService(bookingRepository, personService, roomService);
+            var newBooking = await bookingService.AddReservationAsync(bookingForSubstitute);
+            Check.That(newBooking).IsNotNull();
         }
     }
 }
