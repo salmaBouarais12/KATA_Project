@@ -93,6 +93,11 @@ public class PostRequestTest
         {
             RoomName = "White Room"
         };
+    private PostBookingRequest CreateBookingValidRequest() =>
+        new()
+        {
+            BookingDate = new DateTime(2023, 05, 10)
+        };
     /*
      On teste si c'est valide avec le cas minimum
      On teste chaque erreur

@@ -33,4 +33,32 @@ public class PersonRepositoryTest
             Check.That(persons).HasSize(1);
         }
     }
+    [Fact]
+    public async Task Should_Get_PersonById()
+    {
+        var options = new DbContextOptionsBuilder<DbKataContext>()
+            .UseInMemoryDatabase("when_requesting_personById_on_repository")
+            .Options;
+
+        var persons = new[]
+        {
+            new PersonEntity { Id = 2, FirstName = "Martin", LastName = "Dubois" }
+        };
+
+        await using (var ctx = new DbKataContext(options))
+        {
+            ctx.People.AddRange(persons);
+            await ctx.SaveChangesAsync();
+        }
+
+        await using (var ctx = new DbKataContext(options))
+        {
+            var personRepository = new PersonRepository(ctx);
+            var person = await personRepository.GetPersonByIdAsync(2);
+
+            Check.That(person!.Id).Equals(2);
+            Check.That(person!.FirstName).Equals("Martin");
+            Check.That(person!.LastName).Equals("Dubois");
+        }
+    }
 }
