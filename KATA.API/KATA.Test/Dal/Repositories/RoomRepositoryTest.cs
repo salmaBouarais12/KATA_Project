@@ -32,4 +32,32 @@ public class RoomRepositoryTest
             Check.That(rooms).HasSize(1);
         }
     }
+
+    [Fact]
+    public async Task Should_Get_RoomById()
+    {
+        var options = new DbContextOptionsBuilder<DbKataContext>()
+            .UseInMemoryDatabase("when_requesting_roomById_on_repository")
+            .Options;
+
+        var rooms = new[]
+        {
+            new RoomEntity { Id = 3, RoomName = "Black Room" }
+        };
+
+        await using (var ctx = new DbKataContext(options))
+        {
+            ctx.Rooms.AddRange(rooms);
+            await ctx.SaveChangesAsync();
+        }
+
+        await using (var ctx = new DbKataContext(options))
+        {
+            var roomRepository = new RoomRepository(ctx);
+            var room = await roomRepository.GetRoomByIdAsync(3);
+
+            Check.That(room!.Id).Equals(3);
+            Check.That(room!.RoomName).Equals("Black Room");
+        }
+    }
 }
