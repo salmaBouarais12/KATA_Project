@@ -28,5 +28,22 @@ namespace KATA.Test.Domain.Services
             //Assert
             Check.That(bookings).HasSize(3);
         }
+
+        [Fact]
+        public async Task Should_NotBooking_Room_If_is_Not_Available()
+        {
+            var booking = new Booking { RoomId = 2, PersonId = 1, BookingDate = new DateTime(2023, 05, 10), StartSlot = 2, EndSlot = 3 };
+            IBookingRepository bookingRepository = Substitute.For<IBookingRepository>();
+            IPersonRepository personRepository = Substitute.For<IPersonRepository>();
+            IRoomRepository roomRepository = Substitute.For<IRoomRepository>();
+            var personService = new PersonService(personRepository);
+            var roomService = new RoomService(roomRepository);
+            _ = bookingRepository.DidNotReceive().AddReservationAsync(booking);
+            _ = roomRepository.GetRoomByIdAsync(2);
+            var bookingService = new BookingService(bookingRepository, personService, roomService);
+            var newBooking = await bookingService.AddReservationAsync(booking);
+            Assert.Null(newBooking.Booking);
+            Check.That(newBooking.ErrorMsg).HasSize(2);
+        }
     }
 }
