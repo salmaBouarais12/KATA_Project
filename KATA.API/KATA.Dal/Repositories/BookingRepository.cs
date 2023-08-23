@@ -69,7 +69,7 @@ public class BookingRepository : IBookingRepository
         };
     }
 
-    public async Task<IEnumerable<Booking>> GetReservationByRommAndByDate(SearchBooking searchBooking)
+    public async Task<IEnumerable<Booking>> GetReservationByRoomAndByDate(SearchBooking searchBooking)
     {
         return await _dbKataContext.Bookings.
             Where(b => b.RoomId == searchBooking.RoomId && b.BookingDate.Date == searchBooking.Date.Date).

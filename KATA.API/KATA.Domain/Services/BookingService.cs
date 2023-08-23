@@ -55,7 +55,7 @@ public class BookingService : IBookingService
             SearchBooking searchBooking = new SearchBooking();
             searchBooking.RoomId = reservation.RoomId;
             searchBooking.Date = reservation.BookingDate;
-            var currentReservations = await _bookingRepository.GetReservationByRommAndByDate(searchBooking);
+            var currentReservations = await _bookingRepository.GetReservationByRoomAndByDate(searchBooking);
             var creationBookingResult = new CreationBookingResult();
             var ListeDisponible = new List<Slot>();
             int startSlot = 0;
@@ -141,7 +141,7 @@ public class BookingService : IBookingService
 
     public async Task<IEnumerable<Booking?>> GetReservationByRommAndByDate(SearchBooking searchBooking)
     {
-        return await _bookingRepository.GetReservationByRommAndByDate(searchBooking);
+        return await _bookingRepository.GetReservationByRoomAndByDate(searchBooking);
     }
 
     public async Task<Booking?> DeleteBookingsAsync(int id)

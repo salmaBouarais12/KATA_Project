@@ -7,7 +7,7 @@ public interface IBookingRepository
     Task<IEnumerable<Booking>> GetReservationsAsync();
     Task<Booking?> GetReservationByRoomIdAsync(int roomId);
     Task<Booking> AddReservationAsync(Booking reservation);
-    Task<IEnumerable<Booking>> GetReservationByRommAndByDate(SearchBooking searchBooking);
+    Task<IEnumerable<Booking>> GetReservationByRoomAndByDate(SearchBooking searchBooking);
     Task<Booking?> DeleteBookingsAsync(int id);
 
 }
