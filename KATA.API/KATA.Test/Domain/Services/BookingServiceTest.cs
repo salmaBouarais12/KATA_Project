@@ -1,5 +1,4 @@
 ﻿using KATA.Domain.Interfaces.Repositories;
-using KATA.Domain.Interfaces.Sevices;
 using KATA.Domain.Models;
 using KATA.Domain.Services;
 using NFluent;
@@ -21,7 +20,7 @@ namespace KATA.Test.Domain.Services
         };
             IBookingRepository bookingRepository = Substitute.For<IBookingRepository>();
             bookingRepository.GetReservationsAsync().Returns(listBookings);
-            var bookingService = new BookingService(bookingRepository, null, null);
+            var bookingService = new BookingService(bookingRepository, null!, null!);
 
             //Act
             var bookings = await (bookingService.GetReservationsAsync());
