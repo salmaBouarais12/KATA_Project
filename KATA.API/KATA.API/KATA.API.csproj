@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\KATA.Dal\KATA.Dal.csproj" />
+    <ProjectReference Include="..\Kata.DemoApi\Kata.DemoApi.csproj" />
     <ProjectReference Include="..\KATA.Domain\KATA.Domain.csproj" />
   </ItemGroup>
 

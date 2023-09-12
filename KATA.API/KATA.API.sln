@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KATA.Domain", "KATA.Domain\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KATA.Dal", "KATA.Dal\KATA.Dal.csproj", "{6E5CE81A-7952-411A-8613-0B8A7AA2E473}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KATA.Test", "KATA.Test\KATA.Test.csproj", "{2E5BFCE8-9809-4A29-9D58-1D9125FC7861}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KATA.Test", "KATA.Test\KATA.Test.csproj", "{2E5BFCE8-9809-4A29-9D58-1D9125FC7861}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kata.DemoApi", "Kata.DemoApi\Kata.DemoApi.csproj", "{89FE4BA6-3695-47D1-AF6D-D426EDDF651E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{2E5BFCE8-9809-4A29-9D58-1D9125FC7861}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2E5BFCE8-9809-4A29-9D58-1D9125FC7861}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2E5BFCE8-9809-4A29-9D58-1D9125FC7861}.Release|Any CPU.Build.0 = Release|Any CPU
+		{89FE4BA6-3695-47D1-AF6D-D426EDDF651E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{89FE4BA6-3695-47D1-AF6D-D426EDDF651E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{89FE4BA6-3695-47D1-AF6D-D426EDDF651E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{89FE4BA6-3695-47D1-AF6D-D426EDDF651E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

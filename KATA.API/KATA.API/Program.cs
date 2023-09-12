@@ -1,5 +1,7 @@
+using Kata.DemoApi;
 using KATA.Dal;
 using KATA.Dal.Repositories;
+using KATA.Domain.Interfaces.API;
 using KATA.Domain.Interfaces.Repositories;
 using KATA.Domain.Interfaces.Sevices;
 using KATA.Domain.Services;
@@ -26,7 +28,16 @@ builder.Services.AddScoped<IRoomRepository, RoomRepository>();
 builder.Services.AddScoped<IBookingService, BookingService>();
 builder.Services.AddScoped<IBookingRepository, BookingRepository>();
 
+builder.Services.AddScoped<IWeatherForeCastService, WeatherForeCastService>();
+builder.Services.AddScoped<IDemoAPI, DemoAPI>();
+
 builder.Services.AddDbContext<DbKataContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddHttpClient("DemoAPIClient",httpClient =>
+{
+    httpClient.BaseAddress = new Uri("http://localhost:5278");
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
