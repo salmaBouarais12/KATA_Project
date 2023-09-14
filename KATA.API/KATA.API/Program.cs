@@ -32,7 +32,7 @@ builder.Services.AddScoped<IWeatherForeCastService, WeatherForeCastService>();
 builder.Services.AddScoped<IDemoAPI, DemoAPI>();
 
 builder.Services.AddDbContext<DbKataContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
+builder.Services.AddCors(options => options.AddPolicy("myPolicy", c => c.WithOrigins("http://localhost:4200").AllowAnyHeader()));
 builder.Services.AddHttpClient("DemoAPIClient",httpClient =>
 {
     httpClient.BaseAddress = new Uri("http://localhost:5278");
@@ -47,6 +47,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseCors("myPolicy");
 app.MapControllers();
 app.Run();
 
