@@ -30,16 +30,23 @@ builder.Services.AddScoped<IBookingRepository, BookingRepository>();
 
 builder.Services.AddScoped<IWeatherForeCastService, WeatherForeCastService>();
 builder.Services.AddScoped<IDemoAPI, DemoAPI>();
-
 builder.Services.AddDbContext<DbKataContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-builder.Services.AddCors(options => options.AddPolicy("myPolicy", c => c.WithOrigins("http://localhost:4200").AllowAnyHeader()));
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowSpecificOrigin",
+        builder => builder.WithOrigins("http://localhost:4200")
+                          .AllowAnyHeader()
+                          .AllowAnyMethod());
+});
+
+// In Configure method:
 builder.Services.AddHttpClient("DemoAPIClient",httpClient =>
 {
     httpClient.BaseAddress = new Uri("http://localhost:5278");
 });
 
 var app = builder.Build();
-
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -47,7 +54,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseCors("myPolicy");
+app.UseCors("AllowSpecificOrigin");
 app.MapControllers();
 app.Run();
 
