@@ -104,4 +104,21 @@ public class BookingRepository : IBookingRepository
             EndSlot = bookingToDelete.EndSlot
         };
     }
+
+    public async Task<Booking?> GetReservationByIdAsync(int id)
+    {
+        var result = await _dbKataContext.Bookings.SingleOrDefaultAsync(b => b.Id == id);
+        if (result is not null)
+        {
+            return new Booking
+            {
+                RoomId = result.RoomId,
+                PersonId = result.PersonId,
+                BookingDate =result.BookingDate,
+                StartSlot=result.StartSlot,
+                EndSlot=result.EndSlot
+            };
+        }
+        return null;
+    }
 }
