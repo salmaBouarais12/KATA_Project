@@ -6,6 +6,7 @@ using KATA.Domain.Interfaces.Repositories;
 using KATA.Domain.Interfaces.Sevices;
 using KATA.Domain.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,7 +36,8 @@ builder.Services.AddDbContext<DbKataContext>(options => options.UseSqlServer(bui
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowSpecificOrigin",
-        builder => builder.WithOrigins("http://localhost:4200")
+        builder => builder.AllowAnyOrigin()
+        //WithOrigins("http://localhost:4200")
                           .AllowAnyHeader()
                           .AllowAnyMethod());
 });
@@ -46,6 +48,15 @@ builder.Services.AddHttpClient("DemoAPIClient",httpClient =>
     httpClient.BaseAddress = new Uri("http://localhost:5278");
 });
 
+builder.Services.AddAuthentication("Bearer")
+    .AddJwtBearer("Bearer", options =>
+    {
+        options.Authority = "https://localhost:5001";
+
+        options.TokenValidationParameters.ValidateAudience = false;
+    });
+
+
 var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -54,9 +65,12 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseAuthentication();
+app.UseAuthorization();
 app.UseCors("AllowSpecificOrigin");
 app.MapControllers();
 app.Run();
+
 
 internal record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
 {
