@@ -2,103 +2,102 @@
 using KATA.API.DTO.Responses;
 using KATA.Domain.Interfaces.Sevices;
 using KATA.Domain.Models;
-using KATA.Domain.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace KATA.API.Controllers
+namespace KATA.API.Controllers;
+[Authorize]
+[Route("api/bookings")]
+[ApiController]
+public class BookingController : ControllerBase
 {
-    [Route("api/bookings")]
-    [ApiController]
-    public class BookingController : ControllerBase
+    private readonly IBookingService _bookingService;
+
+    public BookingController(IBookingService bookingService)
     {
-        private readonly IBookingService _bookingService;
+        _bookingService = bookingService;
+    }
 
-        public BookingController(IBookingService bookingService)
+    // GET: api/<BookingController>
+    [HttpGet]
+    public async Task<IActionResult> Get()
+    {
+        var bookings = await _bookingService.GetReservationsAsync();
+
+        var bookingDetails = bookings.Select(b => new BookingResponse(b.Id, b.RoomId, b.PersonId, b.BookingDate, b.StartSlot, b.EndSlot));
+        var bookingsResponse = new BookingsResponse(bookingDetails);
+        return Ok(bookingsResponse);
+    }
+
+    [HttpGet("room/{roomId}")]
+    public async Task<IActionResult> GetByRoomId([FromRoute] int roomId)
+    {
+        var booking = await _bookingService.GetReservationByRoomIdAsync(roomId);
+        if (booking is not null)
         {
-            _bookingService = bookingService;
+            return Ok(new BookingResponse(booking.Id, booking.RoomId, booking.PersonId, booking.BookingDate, booking.StartSlot, booking.EndSlot));
         }
+        return NotFound();
+    }
 
-        // GET: api/<BookingController>
-        [HttpGet]
-        public async Task<IActionResult> Get()
+    // GET api/booking/id/5
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetBookingById([FromRoute] int id)
+    {
+        var booking = await _bookingService.GetReservationByIdAsync(id);
+        if (booking == null) return NotFound();
+        return Ok(new BookingResponse(id, booking.RoomId, booking.PersonId, booking.BookingDate, booking.StartSlot, booking.EndSlot));
+    }
+
+    // POST api/<BookingController>
+    [HttpPost]
+    public async Task<IActionResult> Post([FromBody] PostBookingRequest postBookingRequest)
+    {
+        if (!ModelState.IsValid)
         {
-            var bookings = await _bookingService.GetReservationsAsync();
-
-            var bookingDetails = bookings.Select(b => new BookingResponse(b.Id, b.RoomId, b.PersonId, b.BookingDate, b.StartSlot, b.EndSlot));
-            var bookingsResponse = new BookingsResponse(bookingDetails);
-            return Ok(bookingsResponse);
+            return BadRequest();
         }
-
-        [HttpGet("room/{roomId}")]
-        public async Task<IActionResult> GetByRoomId([FromRoute] int roomId)
+        var reservation = new Booking();
+        reservation.RoomId = postBookingRequest.RoomId;
+        reservation.PersonId = postBookingRequest.PersonId;
+        reservation.BookingDate = postBookingRequest.BookingDate;
+        reservation.StartSlot = postBookingRequest.StartSlot;
+        reservation.EndSlot = postBookingRequest.EndSlot;
+        var addBooking = await _bookingService.AddReservationAsync(reservation);
+        var reservationResponse = new ReservationResponse();
+        //reservationResponse.Message = addBooking.ErrorMsg.ToList();
+        if (addBooking.Booking != null)
         {
-            var booking = await _bookingService.GetReservationByRoomIdAsync(roomId);
-            if (booking is not null)
+            reservationResponse.Reservation = new Booking
             {
-                return Ok(new BookingResponse(booking.Id, booking.RoomId, booking.PersonId, booking.BookingDate, booking.StartSlot, booking.EndSlot));
-            }
+                Id = addBooking.Booking.Id,
+                RoomId = addBooking.Booking.RoomId,
+                PersonId = addBooking.Booking.PersonId,
+                BookingDate = addBooking.Booking.BookingDate,
+                StartSlot = addBooking.Booking.StartSlot,
+                EndSlot = addBooking.Booking.EndSlot
+            };
+        }
+
+        reservationResponse.ListesCreneux = addBooking.ListOfReservation.Select(s => new SlotDTO { StartSlot = s.StartSlot, EndSlot = s.EndSlot });
+        return Ok(addBooking);
+    }
+
+    // DELETE api/<BookingController>/5
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete([FromRoute] int id)
+    {
+        var bookingToDelete = await _bookingService.DeleteBookingsAsync(id);
+        if (bookingToDelete == null)
             return NotFound();
-        }
-
-        // GET api/booking/id/5
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetBookingById([FromRoute] int id)
-        {
-            var booking = await _bookingService.GetReservationByIdAsync(id);
-            if (booking == null) return NotFound();
-            return Ok(new BookingResponse(id, booking.RoomId, booking.PersonId, booking.BookingDate, booking.StartSlot, booking.EndSlot));
-        }
-
-        // POST api/<BookingController>
-        [HttpPost]
-        public async Task<IActionResult> Post([FromBody] PostBookingRequest postBookingRequest)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest();
-            }
-            var reservation = new Booking();
-            reservation.RoomId = postBookingRequest.RoomId;
-            reservation.PersonId = postBookingRequest.PersonId;
-            reservation.BookingDate = postBookingRequest.BookingDate;
-            reservation.StartSlot = postBookingRequest.StartSlot;
-            reservation.EndSlot = postBookingRequest.EndSlot;
-            var addBooking = await _bookingService.AddReservationAsync(reservation);
-            var reservationResponse = new ReservationResponse();
-            //reservationResponse.Message = addBooking.ErrorMsg.ToList();
-            if (addBooking.Booking != null)
-            {
-                reservationResponse.Reservation = new Booking
-                {
-                    Id = addBooking.Booking.Id,
-                    RoomId = addBooking.Booking.RoomId,
-                    PersonId = addBooking.Booking.PersonId,
-                    BookingDate = addBooking.Booking.BookingDate,
-                    StartSlot = addBooking.Booking.StartSlot,
-                    EndSlot = addBooking.Booking.EndSlot
-                };
-            }
-
-            reservationResponse.ListesCreneux = addBooking.ListOfReservation.Select(s => new SlotDTO { StartSlot = s.StartSlot, EndSlot = s.EndSlot });
-            return Ok(addBooking);
-        }
-
-        // DELETE api/<BookingController>/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete([FromRoute] int id)
-        {
-            var bookingToDelete = await _bookingService.DeleteBookingsAsync(id);
-            if (bookingToDelete == null)
-                return NotFound();
-            return Ok(new BookingResponse
-                (bookingToDelete.Id,
-                bookingToDelete.RoomId,
-                bookingToDelete.PersonId,
-                bookingToDelete.BookingDate,
-                bookingToDelete.StartSlot,
-                bookingToDelete.EndSlot));
-        }
+        return Ok(new BookingResponse
+            (bookingToDelete.Id,
+            bookingToDelete.RoomId,
+            bookingToDelete.PersonId,
+            bookingToDelete.BookingDate,
+            bookingToDelete.StartSlot,
+            bookingToDelete.EndSlot));
     }
 }
