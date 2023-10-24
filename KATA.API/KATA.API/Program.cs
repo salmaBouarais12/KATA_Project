@@ -5,6 +5,7 @@ using KATA.Domain.Interfaces.API;
 using KATA.Domain.Interfaces.Repositories;
 using KATA.Domain.Interfaces.Sevices;
 using KATA.Domain.Services;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -49,7 +50,7 @@ builder.Services.AddHttpClient("DemoAPIClient",httpClient =>
 builder.Services.AddAuthentication("Bearer")
     .AddJwtBearer("Bearer", options =>
     {
-        options.Authority = builder.Configuration.GetValue<string>("Url_authority");
+        options.Authority = builder.Configuration.GetValue<string>("UrlAuthority");
 
         options.TokenValidationParameters.ValidateAudience = false;
     });
@@ -69,8 +70,3 @@ app.UseCors("AllowSpecificOrigin");
 app.MapControllers();
 app.Run();
 
-
-internal record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
