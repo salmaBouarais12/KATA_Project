@@ -32,6 +32,7 @@ public class PersonController : ControllerBase
         var personDetails = persons.Select(p => p.ToPersonResponse());
         // var personDetails = persons.Select(PersonExtension.ToPersonResponse);
         var personsResponse = new PersonsResponse(personDetails);
+        _logger.LogInformation("Retrieved {count} persons from the database.", persons.Count());
         return Ok(personsResponse);
     }
 
@@ -56,10 +57,12 @@ public class PersonController : ControllerBase
     {
         if (!ModelState.IsValid)
         {
+            _logger.LogError("Failed to add a new person due to invalid model state.");
             return BadRequest(ModelState);
         }
 
         var personAdded = await _personService.AddPersonsAsync(personRequest.ToPerson());
+        _logger.LogInformation("Successfully added a new person.");
         return Ok(personAdded);
     }
 
@@ -69,15 +72,18 @@ public class PersonController : ControllerBase
     {
         if (!ModelState.IsValid)
         {
+            _logger.LogError("Failed to update a person with ID {id} due to invalid model state.", id);
             return BadRequest();
         }
         var updatePerson = await _personService.UpdatePersonsAsync(id, personRequest.ToPerson());
         if (updatePerson == null)
         {
+            _logger.LogWarning("Failed to update a person with ID {id} as the person was not found.", id);
             return NotFound();
         }
         else
         {
+            _logger.LogInformation("Successfully updated the person with ID {id}.", id);
             return Ok(new PersonResponse(updatePerson.Id, updatePerson.FirstName, updatePerson.LastName));
         }
     }
@@ -87,7 +93,12 @@ public class PersonController : ControllerBase
     public async Task<IActionResult> Delete([FromRoute] int id)
     {
         var personToBeDeleted = await _personService.DeletePersonsAsync(id);
-        if (personToBeDeleted == null) return NotFound();
+        if (personToBeDeleted == null)
+        {
+            _logger.LogWarning("Failed to delete person with ID {id} as the person was not found.", id);
+            return NotFound();
+        }
+        _logger.LogInformation("Successfully deleted the person with ID {id}.", id);
         return Ok(new PersonResponse(personToBeDeleted.Id, personToBeDeleted.FirstName, personToBeDeleted.LastName));
     }
 }

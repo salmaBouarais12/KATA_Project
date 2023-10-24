@@ -15,10 +15,12 @@ namespace KATA.API.Controllers;
 public class RoomController : ControllerBase
 {
     private readonly IRoomService _roomService;
+    private readonly ILogger<RoomController> _logger;
 
-    public RoomController(IRoomService roomService)
+    public RoomController(IRoomService roomService, ILoggerFactory loggerFactory)
     {
         _roomService = roomService;
+        _logger = loggerFactory.CreateLogger<RoomController>();
     }
     // GET: api/<RoomController>
     [HttpGet]
@@ -27,6 +29,7 @@ public class RoomController : ControllerBase
         var rooms = await _roomService.GetAllRoomsAsync();
         var roomDetails = rooms.Select(r => new RoomResponse(r.Id, r.RoomName));
         var RoomsResponse = new RoomsResponse(roomDetails);
+        _logger.LogInformation("Retrieved {count} rooms from the database.", rooms.Count());
         return Ok(RoomsResponse);
     }
 
@@ -35,7 +38,13 @@ public class RoomController : ControllerBase
     public async Task<IActionResult> Get([FromRoute] int id)
     {
         var room = await _roomService.GetRoomByIdAsync(id);
-        if (room == null) return NotFound();
+
+        if (room == null)
+        {
+            _logger.LogWarning("Room with ID {id} not found in the database.", id);
+            return NotFound();
+        }
+        _logger.LogInformation("Retrieved room with ID {id} from the database.", id);
         return Ok(new RoomResponse(room.Id, room.RoomName)); ;
     }
 
@@ -45,12 +54,13 @@ public class RoomController : ControllerBase
     {
         if (!ModelState.IsValid)
         {
+            _logger.LogError("Failed to add a new room due to invalid model state.");
             return BadRequest();
         }
 
         var room = new Room { RoomName = postRoomRequest.RoomName };
         var roomAdded = await _roomService.AddRoomsAsync(room);
-
+        _logger.LogInformation("Successfully added a new room with ID {id}.", roomAdded.Id);
         return Ok(roomAdded);
     }
 
@@ -61,16 +71,19 @@ public class RoomController : ControllerBase
         var room = new Room { RoomName = postRoomRequest.RoomName };
         if (!ModelState.IsValid)
         {
+            _logger.LogError("Failed to update a room with ID {id} due to invalid model state.", id);
             return BadRequest();
         }
         var updateRoom = await _roomService.UpdateRoomsAsync(id, room);
 
         if (updateRoom == null)
         {
+            _logger.LogWarning("Failed to update a room with ID {id} as the room was not found.", id);
             return NotFound();
         }
         else
         {
+            _logger.LogInformation("Successfully updated the room with ID {id}.", id);
             return Ok(new RoomResponse(updateRoom.Id, updateRoom.RoomName));
         }
     }
@@ -80,7 +93,14 @@ public class RoomController : ControllerBase
     public async Task<IActionResult> Delete([FromRoute] int id)
     {
         var roomToBeDeleted = await _roomService.DeleteRoomsAsync(id);
-        if (roomToBeDeleted == null) return NotFound();
+
+        if (roomToBeDeleted == null)
+        {
+            _logger.LogWarning("Failed to delete room with ID {id} as the room was not found.", id);
+            return NotFound();
+        }
+
+        _logger.LogInformation("Successfully deleted the room with ID {id}.", id);
         return Ok(new RoomResponse(roomToBeDeleted.Id, roomToBeDeleted.RoomName));
     }
 }

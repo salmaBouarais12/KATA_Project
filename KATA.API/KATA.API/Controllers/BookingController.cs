@@ -14,10 +14,12 @@ namespace KATA.API.Controllers;
 public class BookingController : ControllerBase
 {
     private readonly IBookingService _bookingService;
+    private readonly ILogger<BookingController> _logger;
 
-    public BookingController(IBookingService bookingService)
+    public BookingController(IBookingService bookingService, ILoggerFactory loggerFactory)
     {
         _bookingService = bookingService;
+        _logger = loggerFactory.CreateLogger<BookingController>();
     }
 
     // GET: api/<BookingController>
@@ -28,6 +30,7 @@ public class BookingController : ControllerBase
 
         var bookingDetails = bookings.Select(b => new BookingResponse(b.Id, b.RoomId, b.PersonId, b.BookingDate, b.StartSlot, b.EndSlot));
         var bookingsResponse = new BookingsResponse(bookingDetails);
+        _logger.LogInformation("Retrieved {count} reservations from the database.", bookings.Count());
         return Ok(bookingsResponse);
     }
 
@@ -35,10 +38,14 @@ public class BookingController : ControllerBase
     public async Task<IActionResult> GetByRoomId([FromRoute] int roomId)
     {
         var booking = await _bookingService.GetReservationByRoomIdAsync(roomId);
+
         if (booking is not null)
         {
+            _logger.LogInformation("Retrieved reservation with ID {id} for room with ID {roomId} from the database.", booking.Id, roomId);
             return Ok(new BookingResponse(booking.Id, booking.RoomId, booking.PersonId, booking.BookingDate, booking.StartSlot, booking.EndSlot));
         }
+
+        _logger.LogWarning("Reservation for room with ID {roomId} not found in the database.", roomId);
         return NotFound();
     }
 
@@ -57,8 +64,10 @@ public class BookingController : ControllerBase
     {
         if (!ModelState.IsValid)
         {
+            _logger.LogError("Failed to add a new reservation due to invalid model state.");
             return BadRequest();
         }
+
         var reservation = new Booking();
         reservation.RoomId = postBookingRequest.RoomId;
         reservation.PersonId = postBookingRequest.PersonId;
@@ -82,6 +91,7 @@ public class BookingController : ControllerBase
         }
 
         reservationResponse.ListesCreneux = addBooking.ListOfReservation.Select(s => new SlotDTO { StartSlot = s.StartSlot, EndSlot = s.EndSlot });
+        _logger.LogInformation("Successfully added a new reservation with ID {id}.", reservationResponse.Reservation?.Id);
         return Ok(addBooking);
     }
 
@@ -90,14 +100,22 @@ public class BookingController : ControllerBase
     public async Task<IActionResult> Delete([FromRoute] int id)
     {
         var bookingToDelete = await _bookingService.DeleteBookingsAsync(id);
+
         if (bookingToDelete == null)
-            return NotFound();
+        {
+            _logger.LogWarning("Failed to delete booking with ID {id} as the booking was not found.", id);
+            return NotFound("Booking not found.");
+        }
+
+        _logger.LogInformation("Successfully deleted the booking with ID {id}.", id);
         return Ok(new BookingResponse
-            (bookingToDelete.Id,
-            bookingToDelete.RoomId,
-            bookingToDelete.PersonId,
-            bookingToDelete.BookingDate,
-            bookingToDelete.StartSlot,
-            bookingToDelete.EndSlot));
+            (
+                bookingToDelete.Id,
+                bookingToDelete.RoomId,
+                bookingToDelete.PersonId,
+                bookingToDelete.BookingDate,
+                bookingToDelete.StartSlot,
+                bookingToDelete.EndSlot
+            ));
     }
 }
