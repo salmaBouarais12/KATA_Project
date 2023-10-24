@@ -5,10 +5,14 @@ using KATA.Domain.Interfaces.API;
 using KATA.Domain.Interfaces.Repositories;
 using KATA.Domain.Interfaces.Sevices;
 using KATA.Domain.Services;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Host.UseSerilog((ctx, lc) => lc
+      .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}")
+      .Enrich.FromLogContext()
+      .ReadFrom.Configuration(ctx.Configuration));
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

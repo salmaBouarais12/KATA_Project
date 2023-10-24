@@ -16,9 +16,11 @@ public class PersonController : ControllerBase
 {
     private readonly IPersonService _personService;
 
-    public PersonController(IPersonService personService)
+    private readonly ILogger<PersonController> _logger;
+    public PersonController(IPersonService personService, ILoggerFactory loggerFactory)
     {
         _personService = personService;
+        _logger = loggerFactory.CreateLogger<PersonController>();
     }
 
 
@@ -40,6 +42,10 @@ public class PersonController : ControllerBase
         var person = await _personService.GetPersonByIdAsync(id);
         if (person is not null)
         {
+            _logger.LogDebug("Debug -- Get Person Id : {Test} {Test2}",id,person.LastName);
+            _logger.LogInformation($"Information -- Get Person Id : {id} {person.LastName}");
+            _logger.LogInformation("Information -- Get Person Id : {Test}", id);
+            _logger.LogError("Error -- Get Person Id : {Test}", id);
             return Ok(person.ToPersonResponse());
         }
         return NotFound();
